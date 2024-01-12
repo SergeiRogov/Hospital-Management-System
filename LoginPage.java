@@ -23,7 +23,7 @@ public class LoginPage implements ActionListener {
 	JLabel passwordLabel = new JLabel("Password:");
 	JLabel messageLabel = new JLabel();
 	
-	HashMap<String, String> loginInfo = new HashMap<String, String>();
+	protected HashMap<String, String> loginInfo = new HashMap<String, String>();
 	
 	public LoginPage(HashMap<String, String> login_passwords){
 		
@@ -82,7 +82,9 @@ public class LoginPage implements ActionListener {
 					messageLabel.setForeground(Color.green);
 					messageLabel.setText("You are logged in!");
 					
-					SystemPage systemPage = new SystemPage();
+					frame.dispose();
+					
+					SystemPage systemPage = new SystemPage(userLogin);
 				} else {
 					messageLabel.setForeground(Color.red);
 					messageLabel.setText("Wrong password!");

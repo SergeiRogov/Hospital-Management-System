@@ -8,6 +8,5 @@ public class Main {
 		
 		LoginPage loginPage = new LoginPage(loginAndPasswords.getLoginInfo());
 	}
-	
 
 }
