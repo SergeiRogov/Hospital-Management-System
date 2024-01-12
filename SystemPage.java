@@ -1,6 +1,8 @@
 package hospital_management_system;
 
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,10 +12,13 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-public class SystemPage implements ActionListener {
+public class SystemPage extends JFrame implements ActionListener {
+	
+	private JPanel drawingPanel; // JPanel for drawing
 	
 	JFrame frame = new JFrame();
 	// welcoming label
@@ -44,11 +49,15 @@ public class SystemPage implements ActionListener {
 	JButton removePatientButton = new JButton("Remove patient");
 	
 	// button for saving file
+	JLabel saveBackupLabel = new JLabel("Save/backup:");
 	JButton saveFileButton = new JButton("Save file");
 	
 	// backup elements
+	JLabel filenameLabel = new JLabel("Backup to:");
+	JLabel bakLabel = new JLabel(".bak");
+	JTextField filenameField = new JTextField("Hospital Management System");
 	JButton backupButton = new JButton("Backup file");
-	JLabel filenameLabel = new JLabel("Backup file name:");
+	
 	
 	SystemPage(String userLogin){
 		
@@ -75,9 +84,10 @@ public class SystemPage implements ActionListener {
         surnameField.getDocument().addDocumentListener(documentListener);
         illnessField.getDocument().addDocumentListener(documentListener);
         idField.getDocument().addDocumentListener(documentListener);
+        filenameField.getDocument().addDocumentListener(documentListener);
 		
 		// welcoming label
-		welcomeLabel.setBounds(400, 5, 600, 25);
+		welcomeLabel.setBounds(230, 5, 600, 25);
 		welcomeLabel.setFont(new Font(null, Font.CENTER_BASELINE, 14));
 		welcomeLabel.setText("Welcome to the Hospital Management System, " + userLogin + "!");
 		
@@ -109,17 +119,34 @@ public class SystemPage implements ActionListener {
 		addPatientButton.addActionListener(this);
 		
 		// remove patient - related elements
-		removePatientLabel.setBounds(310, 45, 200, 25);
+		removePatientLabel.setBounds(300, 45, 200, 25);
 		removePatientLabel.setFont(new Font(null, Font.BOLD, 14));
 		
-		idLabel.setBounds(300, 120, 20, 20);
+		idLabel.setBounds(290, 120, 20, 20);
 		
-		idField.setBounds(320, 120, 180, 20);
+		idField.setBounds(310, 120, 180, 20);
 		
-		removePatientButton.setBounds(310, 210, 150, 25);
+		removePatientButton.setBounds(300, 210, 150, 25);
 		removePatientButton.setFocusable(false);
 		removePatientButton.addActionListener(this);
-
+		
+		// save - related elements
+		saveBackupLabel.setBounds(620, 45, 200, 25);
+		saveBackupLabel.setFont(new Font(null, Font.BOLD, 14));
+		
+		saveFileButton.setBounds(620, 100, 100, 25);
+		saveFileButton.setFocusable(false);
+		saveFileButton.addActionListener(this);
+		
+		// backup - related elements
+		filenameLabel.setBounds(530, 170, 68, 25);
+		filenameField.setBounds(598, 170, 210, 25);
+		bakLabel.setBounds(808, 170, 50, 25);
+		
+		backupButton.setBounds(620, 210, 100, 25);
+		backupButton.setFocusable(false);
+		backupButton.addActionListener(this);
+		
 		// adding every element to a frame
 		// adding add patient - related elements
 		frame.add(welcomeLabel);
@@ -147,14 +174,51 @@ public class SystemPage implements ActionListener {
 		frame.add(idField);
 		frame.add(removePatientButton);
 		
+		// adding save File Button - related elements
+		frame.add(saveBackupLabel);
+		frame.add(saveFileButton);
+		
+		// adding backup File Button - related elements
+		frame.add(backupButton);
+		frame.add(filenameLabel);
+		frame.add(bakLabel);
+		frame.add(filenameField);
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1200, 700);
+		frame.setSize(850, 700);
 		frame.setLayout(null);
 		frame.setVisible(true);
+		
+		drawingPanel = new DrawingPanel(); // Create a JPanel for drawing
+        drawingPanel.setBounds(0, 0, 850, 700); // Set the bounds of the drawing panel
+        frame.add(drawingPanel);
 		
 		// Initial state of buttons
         updateButtonsState();
 	}
+	
+	// Create a custom JPanel for drawing
+    private class DrawingPanel extends JPanel{
+    	private static final long serialVersionUID = 1L;
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+            // Black lines to separate elements
+            g.setColor(Color.BLACK);
+            
+            // Horizontal separating line
+            g.drawLine(0, 40, 850, 40); 
+            
+            // Vertical lines separating left, middle and right sections
+            g.drawLine(260, 40, 260, 260);
+            g.drawLine(510, 40, 510, 260);
+            
+            // Horizontal line separating actions section from information section
+            g.drawLine(0, 260, 850, 260);  
+
+        }
+    }
 	
 	// Update the state of buttons based on text field contents
     private void updateButtonsState() {
@@ -166,6 +230,9 @@ public class SystemPage implements ActionListener {
 
         boolean isRemoveButtonEnabled = !idField.getText().isEmpty();
         removePatientButton.setEnabled(isRemoveButtonEnabled);
+        
+        boolean isBackupButtonEnabled = !filenameField.getText().isEmpty();
+        backupButton.setEnabled(isBackupButtonEnabled);
     }
 
 	@Override
@@ -173,12 +240,24 @@ public class SystemPage implements ActionListener {
 		
 		// addPatient button functionality
 		if(e.getSource()==addPatientButton) {
+			nameField.setText("");
+			surnameField.setText("");
+			illnessField.setText("");
+		}
+
+		// removePatient button functionality
+		if(e.getSource()==removePatientButton) {
+			idField.setText("");
+		}
+		
+		// save file button functionality
+		if(e.getSource()==saveFileButton) {
 			
 		}
 		
-		// addPatient button functionality
-		if(e.getSource()==removePatientButton) {
-			
+		// backup functionality
+		if(e.getSource()==backupButton) {
+			filenameField.setText("Hospital Management System");
 		}
 		
 	}
