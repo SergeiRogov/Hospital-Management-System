@@ -4,6 +4,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -41,7 +43,38 @@ public class SystemPage implements ActionListener {
 	JTextField idField = new JTextField();	
 	JButton removePatientButton = new JButton("Remove patient");
 	
+	// button for saving file
+	JButton saveFileButton = new JButton("Save file");
+	
+	// backup elements
+	JButton backupButton = new JButton("Backup file");
+	JLabel filenameLabel = new JLabel("Backup file name:");
+	
 	SystemPage(String userLogin){
+		
+		// DocumentListener for text fields
+        DocumentListener documentListener = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateButtonsState();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateButtonsState();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateButtonsState();
+            }
+        };
+        
+        // Add DocumentListener to text fields
+        nameField.getDocument().addDocumentListener(documentListener);
+        surnameField.getDocument().addDocumentListener(documentListener);
+        illnessField.getDocument().addDocumentListener(documentListener);
+        idField.getDocument().addDocumentListener(documentListener);
 		
 		// welcoming label
 		welcomeLabel.setBounds(400, 5, 600, 25);
@@ -119,13 +152,32 @@ public class SystemPage implements ActionListener {
 		frame.setLayout(null);
 		frame.setVisible(true);
 		
+		// Initial state of buttons
+        updateButtonsState();
 	}
+	
+	// Update the state of buttons based on text field contents
+    private void updateButtonsState() {
+        boolean isAddButtonEnabled = !nameField.getText().isEmpty() &&
+                !surnameField.getText().isEmpty() &&
+                !illnessField.getText().isEmpty();
+
+        addPatientButton.setEnabled(isAddButtonEnabled);
+
+        boolean isRemoveButtonEnabled = !idField.getText().isEmpty();
+        removePatientButton.setEnabled(isRemoveButtonEnabled);
+    }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		// reset button functionality
+		// addPatient button functionality
 		if(e.getSource()==addPatientButton) {
+			
+		}
+		
+		// addPatient button functionality
+		if(e.getSource()==removePatientButton) {
 			
 		}
 		
