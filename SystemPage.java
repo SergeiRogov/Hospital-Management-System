@@ -240,6 +240,8 @@ public class SystemPage extends JFrame implements ActionListener {
 		
 		// addPatient button functionality
 		if(e.getSource()==addPatientButton) {
+			// to do
+			
 			nameField.setText("");
 			surnameField.setText("");
 			illnessField.setText("");
@@ -247,16 +249,18 @@ public class SystemPage extends JFrame implements ActionListener {
 
 		// removePatient button functionality
 		if(e.getSource()==removePatientButton) {
+			// to do
 			idField.setText("");
 		}
 		
 		// save file button functionality
 		if(e.getSource()==saveFileButton) {
-			
+			// to do
 		}
 		
 		// backup functionality
 		if(e.getSource()==backupButton) {
+			// to do
 			filenameField.setText("Hospital Management System");
 		}
 		
