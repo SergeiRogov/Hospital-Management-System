@@ -62,7 +62,7 @@ public class LoginPage implements ActionListener {
 		frame.add(resetButton);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(450, 450);
+		frame.setSize(450, 350);
 		frame.setLayout(null);
 		frame.setVisible(true);
 	}
