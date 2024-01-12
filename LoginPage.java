@@ -22,12 +22,16 @@ public class LoginPage implements ActionListener {
 	JLabel loginLabel = new JLabel("Login:");
 	JLabel passwordLabel = new JLabel("Password:");
 	JLabel messageLabel = new JLabel();
+	JLabel titleLabel = new JLabel("Hospital Management System");
 	
 	protected HashMap<String, String> loginInfo = new HashMap<String, String>();
 	
 	public LoginPage(HashMap<String, String> login_passwords){
 		
 		loginInfo = login_passwords;
+		
+		titleLabel.setBounds(110, 0, 300, 25);
+		titleLabel.setFont(new Font(null, Font.BOLD, 15));
 		
 		loginLabel.setBounds(50, 100, 75, 25);
 		passwordLabel.setBounds(50, 150, 75, 25);
@@ -49,6 +53,7 @@ public class LoginPage implements ActionListener {
 		frame.add(loginLabel);
 		frame.add(passwordLabel);
 		frame.add(messageLabel);
+		frame.add(titleLabel);
 		
 		frame.add(loginField);
 		frame.add(passwordField);
@@ -64,7 +69,6 @@ public class LoginPage implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
 		
 		// reset button functionality
 		if(e.getSource()==resetButton) {
@@ -85,6 +89,7 @@ public class LoginPage implements ActionListener {
 					frame.dispose();
 					
 					SystemPage systemPage = new SystemPage(userLogin);
+					
 				} else {
 					messageLabel.setForeground(Color.red);
 					messageLabel.setText("Wrong password!");

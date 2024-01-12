@@ -8,7 +8,7 @@ public class Login_Passwords {
 	
 	Login_Passwords(){
 		
-		logininfo.put("Admin1", "qwerty");
+		logininfo.put("q", "q");
 		logininfo.put("Admin2", "abcdefg");
 		logininfo.put("Admin3", "123passcode");
 		
