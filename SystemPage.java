@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -17,6 +18,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 public class SystemPage extends JFrame implements ActionListener {
+	
+	private PatientList patientList;
 	
 	// JPanel for drawing
 	private JPanel drawingPanel; 
@@ -195,6 +198,8 @@ public class SystemPage extends JFrame implements ActionListener {
 		
 		// Initial state of buttons
         updateButtonsState();
+        
+        patientList = new PatientList();
 	}
 	
 	// Create a custom JPanel for drawing
@@ -234,13 +239,96 @@ public class SystemPage extends JFrame implements ActionListener {
         boolean isBackupButtonEnabled = !filenameField.getText().isEmpty();
         backupButton.setEnabled(isBackupButtonEnabled);
     }
+    
+    // Function to find the HospitalRoom with the smallest PatientList
+    private static String findRoomIDWithSmallestPatientList(ArrayList<? extends HospitalRoom> hospitalRooms) {
+    	HospitalRoom smallestRoom = null;
+        int smallestSize = Integer.MAX_VALUE;
+
+        for (HospitalRoom room : hospitalRooms) {
+            int currentSize = room.getPatientList().size(); 
+
+            if (currentSize < smallestSize) {
+                smallestSize = currentSize;
+                smallestRoom = room;
+            }
+        }
+        
+        if (smallestRoom == null) {
+        	return hospitalRooms.get(0).getRoomID();
+        }
+
+        return smallestRoom.getRoomID();
+    }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		// addPatient button functionality
 		if(e.getSource()==addPatientButton) {
-			// to do
+
+			String name = nameField.getText();
+			String surname = surnameField.getText();
+			String illness = illnessField.getText();
+			String roomid;
+			
+			String roomType;
+			// Assign a room based on selected room type
+	        if (radioButton1.isSelected()) {
+	        	roomType = "Medical";
+	        } else if (radioButton2.isSelected()) {
+	        	roomType = "Intensive Care";
+	        } else if (radioButton3.isSelected()) {
+	        	roomType = "Operating";
+	        } else {
+	        	// Default
+	        	roomType = "Medical";
+	        }
+	        
+	        switch (roomType) {
+	        case "Medical":
+	        	roomid = findRoomIDWithSmallestPatientList(MedicalRoom.medicalRooms);
+	            break;
+	        case "Intensive Care":
+	        	roomid = findRoomIDWithSmallestPatientList(IntensiveCareRoom.intensiveCareRooms);
+	            break;
+	        case "Operating":
+	        	roomid = findRoomIDWithSmallestPatientList(OperatingRoom.operatingRooms);
+	            break;
+	        default:
+	        	roomid = findRoomIDWithSmallestPatientList(MedicalRoom.medicalRooms);
+	            break;
+	        }
+	        
+	        
+//	        for(HospitalRoom med : MedicalRoom.medicalRooms) {
+//				System.out.println(med.roomPatients.size());
+//			}
+			
+			Patient patient = new Patient(name, surname, illness);
+			patient.setRoomId(roomid);
+			
+			patientList.addPatient(patient);
+			
+			switch (roomType) {
+	        case "Medical":
+
+	            break;
+	        case "Intensive Care":
+	   
+	            break;
+	        case "Operating":
+	        	
+	            break;
+	        default:
+
+	            break;
+	        }
+			
+			System.out.println("---------");
+			for(Patient pat: patientList.getPatientList()) {
+				System.out.println(pat);
+			}
 			
 			nameField.setText("");
 			surnameField.setText("");

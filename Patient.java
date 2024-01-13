@@ -6,7 +6,7 @@ public class Patient {
 	private String surname;
 	private String illness;
 	private String id;
-	private String room;
+	private String roomid;
 	
 	private static int patientCount = 0;
 
@@ -14,12 +14,16 @@ public class Patient {
         this.name = name;
         this.surname = surname;
         this.illness = illness;
-        this.id = "" + patientCount;
+        this.id = patientCount + "";
         patientCount++;
     }
     
-    protected void removePatient(String id) {
-    	patientCount--;
+    public void setRoomId(String roomid) {
+    	this.roomid = roomid;
     }
+    
+    public String toString() {
+		return name + " " + surname + " " + illness + " " + id + " " + roomid;
+	}
 
 }
