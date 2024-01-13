@@ -18,7 +18,8 @@ import javax.swing.JTextField;
 
 public class SystemPage extends JFrame implements ActionListener {
 	
-	private JPanel drawingPanel; // JPanel for drawing
+	// JPanel for drawing
+	private JPanel drawingPanel; 
 	
 	JFrame frame = new JFrame();
 	// welcoming label
@@ -57,8 +58,7 @@ public class SystemPage extends JFrame implements ActionListener {
 	JLabel bakLabel = new JLabel(".bak");
 	JTextField filenameField = new JTextField("Hospital Management System");
 	JButton backupButton = new JButton("Backup file");
-	
-	
+
 	SystemPage(String userLogin){
 		
 		// DocumentListener for text fields
