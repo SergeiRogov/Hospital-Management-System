@@ -10,7 +10,12 @@ import java.util.ArrayList;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -23,12 +28,14 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class SystemPage extends JFrame implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	private PatientList patientList;
 	private Hospital generalHospital;
+	String fileName = "Hospital_Management_System-Database.txt";
 	
 	// JPanel for drawing
 	private JPanel drawingPanel; 
@@ -244,7 +251,13 @@ public class SystemPage extends JFrame implements ActionListener {
 		drawingPanel = new DrawingPanel(); // Create a JPanel for drawing
         drawingPanel.setBounds(0, 0, 850, 700); // Set the bounds of the drawing panel
         frame.add(drawingPanel);
-		
+        
+        Path filePath = Paths.get(fileName);
+        
+        if (Files.exists(filePath)) {
+        	loadFromFile(fileName);
+        }
+        
         updateButtonsState();
 
         // Add JTextArea for displaying room information
@@ -255,6 +268,8 @@ public class SystemPage extends JFrame implements ActionListener {
         // Update room information
         updateRoomInfo();
         
+        roomInfoTextArea.selectAll();
+      
 	}
 	
 	// Method to update room information in the JTextArea
@@ -269,7 +284,9 @@ public class SystemPage extends JFrame implements ActionListener {
                 	
                 if (room.getPatientList().isEmpty()) {
                     roomInfo.append(" Empty\n");
+                    
                 } else {
+                	
                 	for (Patient patient : room.getPatientList()) {
                 		roomInfo.append(" Patient ").append(patient.toString()).append(",");
                 	}
@@ -280,6 +297,49 @@ public class SystemPage extends JFrame implements ActionListener {
         }
 
         roomInfoTextArea.setText(roomInfo.toString());
+    }
+    
+    private void loadFromFile(String fileName) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            
+            String line;
+            while ((line = reader.readLine()) != null) {
+            	
+            	String[] values = line.split(";");
+            	if (values.length == 5) {
+                    String patientID = values[0];
+                    String name = values[1];
+                    String surname = values[2];
+                    String illness = values[3];
+                    String roomID = values[4];
+                    
+                    HospitalRoom roomToAssign = null;
+                    
+                    for (HospitalFloor floor : generalHospital.getFloors()) { 
+                        for (HospitalRoom room : floor.getRooms()) {
+                        	if (room.getRoomID().equals(roomID)) {
+                        		roomToAssign = room;
+                        		break;
+                        	}
+                        }
+                    }
+                    
+                    if (roomToAssign == null) {
+                    	roomToAssign = generalHospital.getFloors().get(2).getRooms().get(0);
+                    }
+
+                    Patient patient = new Patient(patientID, name, surname, illness, roomToAssign);
+                    patientList.addPatient(patient);
+                    roomToAssign.addPatient(patient);
+          
+                } else if (values.length == 1) {
+                	int patientCount = Integer.parseInt(values[0]);
+                	Patient.setPatientCount(patientCount);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 	
 	// Create a custom JPanel for drawing

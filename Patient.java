@@ -19,6 +19,14 @@ public class Patient {
         patientCount++;
     }
     
+    public Patient(String id, String name, String surname, String illness, HospitalRoom room) {
+    	this.id = id;
+    	this.name = name;
+        this.surname = surname;
+        this.illness = illness;
+        this.room = room;
+    }
+    
     public void setRoom(HospitalRoom room) {
     	this.room = room;
     }
@@ -29,6 +37,10 @@ public class Patient {
     
     public static int getPatientCount() {
 		return patientCount;
+	}
+    
+    public static void setPatientCount(int count) {
+		patientCount = count;
 	}
     
     
