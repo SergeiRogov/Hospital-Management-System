@@ -28,7 +28,7 @@ public class Patient {
 	}
     
     public String toString() {
-		return name + " " + surname + " " + illness + " " + id + " " + room.getRoomID() + " " + room.getType();
+		return id + " [Name:" + name + " " + surname + "; Illness:" + illness + "]";
 	}
 
 }

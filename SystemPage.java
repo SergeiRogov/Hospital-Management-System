@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class SystemPage extends JFrame implements ActionListener {
@@ -63,6 +64,8 @@ public class SystemPage extends JFrame implements ActionListener {
 	JLabel bakLabel = new JLabel(".bak");
 	JTextField filenameField = new JTextField("Hospital Management System");
 	JButton backupButton = new JButton("Backup file");
+	
+	JTextArea roomInfoTextArea = new JTextArea();
 
 	SystemPage(String userLogin){
 		
@@ -101,6 +104,8 @@ public class SystemPage extends JFrame implements ActionListener {
 		floors.add(hospitalFloor3);
 		
 		generalHospital = new Hospital(floors);
+		
+		patientList = new PatientList();
 		
 		// DocumentListener for text fields
         DocumentListener documentListener = new DocumentListener() {
@@ -234,11 +239,41 @@ public class SystemPage extends JFrame implements ActionListener {
         drawingPanel.setBounds(0, 0, 850, 700); // Set the bounds of the drawing panel
         frame.add(drawingPanel);
 		
-		// Initial state of buttons
         updateButtonsState();
+
+        // Add JTextArea for displaying room information
+        roomInfoTextArea.setBounds(10, 270, 830, 300);
+        roomInfoTextArea.setEditable(false);
+        frame.add(roomInfoTextArea);
         
-        patientList = new PatientList();
+        // Update room information
+        updateRoomInfo();
 	}
+	
+	// Method to update room information in the JTextArea
+    private void updateRoomInfo() {
+        StringBuilder roomInfo = new StringBuilder();
+
+        for (HospitalFloor floor : generalHospital.getFloors()) {
+            roomInfo.append("Floor ").append(floor.getLevel()).append(": \n");
+
+            for (HospitalRoom room : floor.getRooms()) {
+                roomInfo.append("    Room ").append(room.getRoomID()).append(" (").append(room.getType()).append("):");
+                	
+                if (room.getPatientList().isEmpty()) {
+                    roomInfo.append(" Empty\n");
+                } else {
+                	for (Patient patient : room.getPatientList()) {
+                		roomInfo.append(" Patient ").append(patient.toString()).append(",");
+                	}
+                	roomInfo.append("\n");
+                }
+            }
+            roomInfo.append("\n");
+        }
+
+        roomInfoTextArea.setText(roomInfo.toString());
+    }
 	
 	// Create a custom JPanel for drawing
     private class DrawingPanel extends JPanel{
@@ -329,23 +364,25 @@ public class SystemPage extends JFrame implements ActionListener {
 			smallestRoom.addPatient(patient);
 			
 			// Everything stored in hospital 
-			System.out.println("---------");
-	        for(HospitalFloor floor : generalHospital.getFloors()) {
-	        	System.out.println("FLOOR " + floor.getLevel());
-	        	for(HospitalRoom room : floor.getRooms()) {
-	        		System.out.println("ROOM " + room.getRoomID() + " " + room.getType());
-		        	for(Patient patien : room.getPatientList()) {
-		        		System.out.println(patien);
-		        	}
-				}
-			}
+//			System.out.println("---------");
+//	        for(HospitalFloor floor : generalHospital.getFloors()) {
+//	        	System.out.println("FLOOR " + floor.getLevel());
+//	        	for(HospitalRoom room : floor.getRooms()) {
+//	        		System.out.println("ROOM " + room.getRoomID() + " " + room.getType());
+//		        	for(Patient patien : room.getPatientList()) {
+//		        		System.out.println(patien);
+//		        	}
+//				}
+//			}
 //			PATIENTLIST 
 //	        System.out.println("---------");
 //	       
 //        	for(Patient patien : patientList.getPatientList()) {
 //        		System.out.println(patien);
 //        	}
+			updateRoomInfo();
 	        JOptionPane.showMessageDialog(frame, "New patient is added.", "Message", JOptionPane.INFORMATION_MESSAGE);
+	        
 			nameField.setText("");
 			surnameField.setText("");
 			illnessField.setText("");
@@ -359,6 +396,29 @@ public class SystemPage extends JFrame implements ActionListener {
 			String idToDelete = idField.getText();
 			ArrayList<Patient> patients = patientList.getPatientList();
 			
+			HospitalRoom roomWithPatient = null;
+			
+			for(HospitalFloor floor : generalHospital.getFloors()) {
+				for(HospitalRoom room : floor.getRooms()) {
+	        		ArrayList<Patient> roomPatients = room.getPatientList();
+	        		for(Patient patient : roomPatients) {
+	        			if(patient.getID().equals(idToDelete)) {
+	        				patientToDelete = patient;
+	        				roomWithPatient = room;
+	        				break;
+						}
+		        	}
+				}
+			}
+			
+			if (patientToDelete == null) {
+		        // No patient with such ID
+				// No code needed
+		    } else {
+		    	roomWithPatient.removePatient(patientToDelete);
+		    }
+			
+			patientToDelete = null;
 			for(Patient patient : patients) {
 				if(patient.getID().equals(idToDelete)) {
 					patientToDelete = patient;
@@ -372,42 +432,25 @@ public class SystemPage extends JFrame implements ActionListener {
 			} else {
 				String message = "Patient " + idToDelete + " is removed.";
 				patientList.removePatient(patientToDelete);
+				updateRoomInfo();
 				JOptionPane.showMessageDialog(frame, message, "Message", JOptionPane.INFORMATION_MESSAGE);
 			}
 			
-			HospitalRoom roomWithPatient = null;
-			patientToDelete = null;
 			
-			for(HospitalFloor floor : generalHospital.getFloors()) {
-				for(HospitalRoom room : floor.getRooms()) {
-	        		ArrayList<Patient> roomPatients = room.getPatientList();
-	        		for(Patient patient : roomPatients) {
-	        			if(patient.getID().equals(idToDelete)) {
-	        				patientToDelete = patient;
-	        				roomWithPatient = room;
-						}
-		        	}
-				}
-			}
-			if (patientToDelete == null) {
-		        
-		    } else {
-		    	roomWithPatient.removePatient(patientToDelete);
-		    }
 //			System.out.println("---------");
 //			for(Patient patien : patientList.getPatientList()) {
 //        		System.out.println(patien);
 //        	}
-			System.out.println("---------");
-	        for(HospitalFloor floor : generalHospital.getFloors()) {
-	        	System.out.println("FLOOR " + floor.getLevel());
-	        	for(HospitalRoom room : floor.getRooms()) {
-	        		System.out.println("ROOM " + room.getRoomID() + " " + room.getType());
-		        	for(Patient patien : room.getPatientList()) {
-		        		System.out.println(patien);
-		        	}
-				}
-			}
+//			System.out.println("---------");
+//	        for(HospitalFloor floor : generalHospital.getFloors()) {
+//	        	System.out.println("FLOOR " + floor.getLevel());
+//	        	for(HospitalRoom room : floor.getRooms()) {
+//	        		System.out.println("ROOM " + room.getRoomID() + " " + room.getType());
+//		        	for(Patient patien : room.getPatientList()) {
+//		        		System.out.println(patien);
+//		        	}
+//				}
+//			}
 			idField.setText("");
 		}
 		
