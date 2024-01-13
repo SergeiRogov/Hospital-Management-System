@@ -309,33 +309,17 @@ public class SystemPage extends JFrame implements ActionListener {
 			String illness = illnessField.getText();
 			HospitalRoom smallestRoom;
 			
-			String roomType;
 			// Assign a room based on selected room type
 	        if (radioButton1.isSelected()) {
-	        	roomType = "Medical";
+	        	smallestRoom = findRoomWithSmallestPatientList(MedicalRoom.medicalRooms);
 	        } else if (radioButton2.isSelected()) {
-	        	roomType = "Intensive Care";
+	        	smallestRoom = findRoomWithSmallestPatientList(IntensiveCareRoom.intensiveCareRooms);
 	        } else if (radioButton3.isSelected()) {
-	        	roomType = "Operating";
+	        	smallestRoom = findRoomWithSmallestPatientList(OperatingRoom.operatingRooms);
 	        } else {
 	        	// Default
-	        	roomType = "Medical";
+	        	smallestRoom = findRoomWithSmallestPatientList(MedicalRoom.medicalRooms);
 	        }
-	        
-	        switch (roomType) {
-	        case "Medical":
-	        	smallestRoom = findRoomWithSmallestPatientList(MedicalRoom.medicalRooms);
-	            break;
-	        case "Intensive Care":
-	        	smallestRoom = findRoomWithSmallestPatientList(IntensiveCareRoom.intensiveCareRooms);
-	            break;
-	        case "Operating":
-	        	smallestRoom = findRoomWithSmallestPatientList(OperatingRoom.operatingRooms);
-	            break;
-	        default:
-	        	smallestRoom = findRoomWithSmallestPatientList(MedicalRoom.medicalRooms);
-	            break;
-	        }  
 			
 			Patient patient = new Patient(name, surname, illness);
 
@@ -343,6 +327,7 @@ public class SystemPage extends JFrame implements ActionListener {
 			patientList.addPatient(patient);
 			smallestRoom.addPatient(patient);
 			
+			// Everything stored in hospital 
 //			System.out.println("---------");
 //	        for(HospitalFloor floor : generalHospital.getFloors()) {
 //	        	System.out.println("FLOOR " + floor.getLevel());
@@ -353,14 +338,13 @@ public class SystemPage extends JFrame implements ActionListener {
 //		        	}
 //				}
 //			}
-	        
-	        System.out.println("---------");
-	       
-        	for(Patient patien : patientList.getPatientList()) {
-        		System.out.println(patien);
-        	}
-		
-			
+			// PATIENTLIST 
+//	        System.out.println("---------");
+//	       
+//        	for(Patient patien : patientList.getPatientList()) {
+//        		System.out.println(patien);
+//        	}
+
 			nameField.setText("");
 			surnameField.setText("");
 			illnessField.setText("");
