@@ -9,5 +9,9 @@ public class Hospital {
 	public Hospital(ArrayList<HospitalFloor> floors) {
 		this.floors = floors;
 	}
+	
+	public ArrayList<HospitalFloor> getFloors(){
+		return floors;
+	}
 
 }

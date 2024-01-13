@@ -23,7 +23,7 @@ public class Patient {
     }
     
     public String toString() {
-		return name + " " + surname + " " + illness + " " + id + " " + roomid;
+		return name + " " + surname + " " + illness + " " + id + " " + roomid + " " ;
 	}
 
 }

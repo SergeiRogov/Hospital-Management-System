@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 public class SystemPage extends JFrame implements ActionListener {
 	
 	private PatientList patientList;
+	private Hospital generalHospital;
 	
 	// JPanel for drawing
 	private JPanel drawingPanel; 
@@ -63,6 +64,42 @@ public class SystemPage extends JFrame implements ActionListener {
 	JButton backupButton = new JButton("Backup file");
 
 	SystemPage(String userLogin){
+		
+		ArrayList<HospitalRoom> roomsFloor1 = new ArrayList<>();
+		ArrayList<HospitalRoom> roomsFloor2 = new ArrayList<>();
+		ArrayList<HospitalRoom> roomsFloor3 = new ArrayList<>();
+		
+		// Instantiating all existing rooms in General Hospital
+		// First floor
+		roomsFloor1.add(new OperatingRoom(30, "101"));
+		roomsFloor1.add(new OperatingRoom(50, "102"));
+		roomsFloor1.add(new OperatingRoom(40, "103"));
+		roomsFloor1.add(new IntensiveCareRoom(40, "104"));
+		roomsFloor1.add(new MedicalRoom(22, "105"));
+		
+		// Second floor
+		roomsFloor2.add(new IntensiveCareRoom(30, "201"));
+		roomsFloor2.add(new IntensiveCareRoom(35, "202"));
+		roomsFloor2.add(new IntensiveCareRoom(40, "203"));
+		roomsFloor2.add(new MedicalRoom(30, "204"));
+		
+		// Third floor
+		roomsFloor3.add(new MedicalRoom(15, "301"));
+		roomsFloor3.add(new MedicalRoom(20, "302"));
+		roomsFloor3.add(new MedicalRoom(17, "303"));
+		roomsFloor3.add(new IntensiveCareRoom(20, "304"));
+		
+		HospitalFloor hospitalFloor1 = new HospitalFloor(1, roomsFloor1);
+		HospitalFloor hospitalFloor2 = new HospitalFloor(2, roomsFloor2);
+		HospitalFloor hospitalFloor3 = new HospitalFloor(3, roomsFloor3);
+		
+		ArrayList<HospitalFloor> floors = new ArrayList<>();
+	
+		floors.add(hospitalFloor1);
+		floors.add(hospitalFloor2);
+		floors.add(hospitalFloor3);
+		
+		generalHospital = new Hospital(floors);
 		
 		// DocumentListener for text fields
         DocumentListener documentListener = new DocumentListener() {
@@ -311,12 +348,7 @@ public class SystemPage extends JFrame implements ActionListener {
 	        	} else
 	        		roomid = smallestRoom.getRoomID();
 	            break;
-	        }
-	        
-	        
-//	        for(HospitalRoom med : MedicalRoom.medicalRooms) {
-//				System.out.println(med.roomPatients.size());
-//			}
+	        }  
 			
 			Patient patient = new Patient(name, surname, illness);
 			patient.setRoomId(roomid);
@@ -324,25 +356,23 @@ public class SystemPage extends JFrame implements ActionListener {
 			patientList.addPatient(patient);
 			smallestRoom.addPatient(patient);
 			
-			switch (roomType) {
-	        case "Medical":
-
-	            break;
-	        case "Intensive Care":
-	   
-	            break;
-	        case "Operating":
-	        	
-	            break;
-	        default:
-
-	            break;
-	        }
-			
-			System.out.println("---------");
-			for(Patient pat: patientList.getPatientList()) {
-				System.out.println(pat);
-			}
+//			System.out.println("---------");
+//	        for(HospitalFloor floor : generalHospital.getFloors()) {
+//	        	System.out.println("FLOOR " + floor.getLevel());
+//	        	for(HospitalRoom room : floor.getRooms()) {
+//	        		System.out.println("ROOM " + room.getRoomID() + " " + room.getType());
+//		        	for(Patient patien : room.getPatientList()) {
+//		        		System.out.println(patien);
+//		        	}
+//				}
+//			}
+	        
+	        System.out.println("---------");
+	       
+        	for(Patient patien : patientList.getPatientList()) {
+        		System.out.println(patien);
+        	}
+		
 			
 			nameField.setText("");
 			surnameField.setText("");

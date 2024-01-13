@@ -24,6 +24,10 @@ public abstract class HospitalRoom {
 		return this.roomID;
 	}
 	
+	public String getType() {
+		return this.type;
+	}
+	
 	public ArrayList<Patient> getPatientList(){
 		return roomPatients;
 	}
