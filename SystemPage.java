@@ -13,6 +13,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -328,31 +329,85 @@ public class SystemPage extends JFrame implements ActionListener {
 			smallestRoom.addPatient(patient);
 			
 			// Everything stored in hospital 
-//			System.out.println("---------");
-//	        for(HospitalFloor floor : generalHospital.getFloors()) {
-//	        	System.out.println("FLOOR " + floor.getLevel());
-//	        	for(HospitalRoom room : floor.getRooms()) {
-//	        		System.out.println("ROOM " + room.getRoomID() + " " + room.getType());
-//		        	for(Patient patien : room.getPatientList()) {
-//		        		System.out.println(patien);
-//		        	}
-//				}
-//			}
-			// PATIENTLIST 
+			System.out.println("---------");
+	        for(HospitalFloor floor : generalHospital.getFloors()) {
+	        	System.out.println("FLOOR " + floor.getLevel());
+	        	for(HospitalRoom room : floor.getRooms()) {
+	        		System.out.println("ROOM " + room.getRoomID() + " " + room.getType());
+		        	for(Patient patien : room.getPatientList()) {
+		        		System.out.println(patien);
+		        	}
+				}
+			}
+//			PATIENTLIST 
 //	        System.out.println("---------");
 //	       
 //        	for(Patient patien : patientList.getPatientList()) {
 //        		System.out.println(patien);
 //        	}
-
+	        JOptionPane.showMessageDialog(frame, "New patient is added.", "Message", JOptionPane.INFORMATION_MESSAGE);
 			nameField.setText("");
 			surnameField.setText("");
 			illnessField.setText("");
+			
 		}
 
 		// removePatient button functionality
 		if(e.getSource()==removePatientButton) {
-			// to do
+			
+			Patient patientToDelete = null;
+			String idToDelete = idField.getText();
+			ArrayList<Patient> patients = patientList.getPatientList();
+			
+			for(Patient patient : patients) {
+				if(patient.getID().equals(idToDelete)) {
+					patientToDelete = patient;
+					break;
+				}
+			}
+			
+			if (patientToDelete == null) {
+				String message = "Patient " + idToDelete + " is not found.";
+				JOptionPane.showMessageDialog(frame, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				String message = "Patient " + idToDelete + " is removed.";
+				patientList.removePatient(patientToDelete);
+				JOptionPane.showMessageDialog(frame, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+			}
+			
+			HospitalRoom roomWithPatient = null;
+			patientToDelete = null;
+			
+			for(HospitalFloor floor : generalHospital.getFloors()) {
+				for(HospitalRoom room : floor.getRooms()) {
+	        		ArrayList<Patient> roomPatients = room.getPatientList();
+	        		for(Patient patient : roomPatients) {
+	        			if(patient.getID().equals(idToDelete)) {
+	        				patientToDelete = patient;
+	        				roomWithPatient = room;
+						}
+		        	}
+				}
+			}
+			if (patientToDelete == null) {
+		        
+		    } else {
+		    	roomWithPatient.removePatient(patientToDelete);
+		    }
+//			System.out.println("---------");
+//			for(Patient patien : patientList.getPatientList()) {
+//        		System.out.println(patien);
+//        	}
+			System.out.println("---------");
+	        for(HospitalFloor floor : generalHospital.getFloors()) {
+	        	System.out.println("FLOOR " + floor.getLevel());
+	        	for(HospitalRoom room : floor.getRooms()) {
+	        		System.out.println("ROOM " + room.getRoomID() + " " + room.getType());
+		        	for(Patient patien : room.getPatientList()) {
+		        		System.out.println(patien);
+		        	}
+				}
+			}
 			idField.setText("");
 		}
 		

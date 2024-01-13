@@ -23,8 +23,8 @@ public class PatientList {
         return patients;
     }
 	
-//	public void removePatient() {
-//		Patient.patientCount--;
-//	}
+	public void removePatient(Patient patient) {
+		patients.remove(patient);
+	}
 
 }

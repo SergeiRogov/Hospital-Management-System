@@ -31,5 +31,9 @@ public abstract class HospitalRoom {
 	public ArrayList<Patient> getPatientList(){
 		return roomPatients;
 	}
+	
+	public void removePatient(Patient patient) {
+		roomPatients.remove(patient);
+	}
 
 }

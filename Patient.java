@@ -23,6 +23,10 @@ public class Patient {
     	this.room = room;
     }
     
+    public String getID() {
+		return id;
+	}
+    
     public String toString() {
 		return name + " " + surname + " " + illness + " " + id + " " + room.getRoomID() + " " + room.getType();
 	}
