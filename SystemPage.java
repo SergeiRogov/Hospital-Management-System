@@ -290,6 +290,10 @@ public class SystemPage extends JFrame implements ActionListener {
                 smallestRoom = room;
             }
         }
+        
+        if (smallestRoom == null) {
+    		smallestRoom = hospitalRooms.get(0);
+    	}
 
         return smallestRoom;
     }
@@ -303,7 +307,6 @@ public class SystemPage extends JFrame implements ActionListener {
 			String name = nameField.getText();
 			String surname = surnameField.getText();
 			String illness = illnessField.getText();
-			String roomid;
 			HospitalRoom smallestRoom;
 			
 			String roomType;
@@ -322,37 +325,21 @@ public class SystemPage extends JFrame implements ActionListener {
 	        switch (roomType) {
 	        case "Medical":
 	        	smallestRoom = findRoomWithSmallestPatientList(MedicalRoom.medicalRooms);
-	        	if (smallestRoom == null) {
-	        		roomid = MedicalRoom.medicalRooms.get(0).getRoomID();
-	        	}
-	        	roomid = smallestRoom.getRoomID();
 	            break;
 	        case "Intensive Care":
 	        	smallestRoom = findRoomWithSmallestPatientList(IntensiveCareRoom.intensiveCareRooms);
-	        	if (smallestRoom == null) {
-	        		roomid = IntensiveCareRoom.intensiveCareRooms.get(0).getRoomID();
-	        	} else
-	        		roomid = smallestRoom.getRoomID();
 	            break;
 	        case "Operating":
 	        	smallestRoom = findRoomWithSmallestPatientList(OperatingRoom.operatingRooms);
-	        	if (smallestRoom == null) {
-	        		roomid = OperatingRoom.operatingRooms.get(0).getRoomID();
-	        	} else
-	        		roomid = smallestRoom.getRoomID();
 	            break;
 	        default:
 	        	smallestRoom = findRoomWithSmallestPatientList(MedicalRoom.medicalRooms);
-	        	if (smallestRoom == null) {
-	        		roomid = MedicalRoom.medicalRooms.get(0).getRoomID();
-	        	} else
-	        		roomid = smallestRoom.getRoomID();
 	            break;
 	        }  
 			
 			Patient patient = new Patient(name, surname, illness);
-			patient.setRoomId(roomid);
-			
+
+			patient.setRoom(smallestRoom);
 			patientList.addPatient(patient);
 			smallestRoom.addPatient(patient);
 			

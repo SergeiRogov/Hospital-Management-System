@@ -6,7 +6,8 @@ public class Patient {
 	private String surname;
 	private String illness;
 	private String id;
-	private String roomid;
+
+	private HospitalRoom room;
 	
 	private static int patientCount = 0;
 
@@ -18,12 +19,12 @@ public class Patient {
         patientCount++;
     }
     
-    public void setRoomId(String roomid) {
-    	this.roomid = roomid;
+    public void setRoom(HospitalRoom room) {
+    	this.room = room;
     }
     
     public String toString() {
-		return name + " " + surname + " " + illness + " " + id + " " + roomid + " " ;
+		return name + " " + surname + " " + illness + " " + id + " " + room.getRoomID() + " " + room.getType();
 	}
 
 }
