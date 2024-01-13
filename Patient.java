@@ -27,6 +27,10 @@ public class Patient {
 		return id;
 	}
     
+    public String stringToFile() {
+		return id + ";" + name + ";" + surname + ";" + illness + ";" + room.getRoomID();
+	}
+    
     public String toString() {
 		return id + " [Name:" + name + " " + surname + "; Illness:" + illness + "]";
 	}

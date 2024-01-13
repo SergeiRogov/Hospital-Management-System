@@ -7,6 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.ButtonGroup;
@@ -21,6 +26,7 @@ import javax.swing.JTextField;
 
 public class SystemPage extends JFrame implements ActionListener {
 	
+	private static final long serialVersionUID = 1L;
 	private PatientList patientList;
 	private Hospital generalHospital;
 	
@@ -248,6 +254,7 @@ public class SystemPage extends JFrame implements ActionListener {
         
         // Update room information
         updateRoomInfo();
+        
 	}
 	
 	// Method to update room information in the JTextArea
@@ -333,6 +340,20 @@ public class SystemPage extends JFrame implements ActionListener {
 
         return smallestRoom;
     }
+    
+    private static void createFileIfNotExists(String fileName) {
+        try {
+            File file = new File(fileName);
+            if (file.createNewFile()) {
+                System.out.println("File created: " + file.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while creating the file.");
+            e.printStackTrace();
+        }
+    }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -362,24 +383,7 @@ public class SystemPage extends JFrame implements ActionListener {
 			patient.setRoom(smallestRoom);
 			patientList.addPatient(patient);
 			smallestRoom.addPatient(patient);
-			
-			// Everything stored in hospital 
-//			System.out.println("---------");
-//	        for(HospitalFloor floor : generalHospital.getFloors()) {
-//	        	System.out.println("FLOOR " + floor.getLevel());
-//	        	for(HospitalRoom room : floor.getRooms()) {
-//	        		System.out.println("ROOM " + room.getRoomID() + " " + room.getType());
-//		        	for(Patient patien : room.getPatientList()) {
-//		        		System.out.println(patien);
-//		        	}
-//				}
-//			}
-//			PATIENTLIST 
-//	        System.out.println("---------");
-//	       
-//        	for(Patient patien : patientList.getPatientList()) {
-//        		System.out.println(patien);
-//        	}
+
 			updateRoomInfo();
 	        JOptionPane.showMessageDialog(frame, "New patient is added.", "Message", JOptionPane.INFORMATION_MESSAGE);
 	        
@@ -435,33 +439,53 @@ public class SystemPage extends JFrame implements ActionListener {
 				updateRoomInfo();
 				JOptionPane.showMessageDialog(frame, message, "Message", JOptionPane.INFORMATION_MESSAGE);
 			}
-			
-			
-//			System.out.println("---------");
-//			for(Patient patien : patientList.getPatientList()) {
-//        		System.out.println(patien);
-//        	}
-//			System.out.println("---------");
-//	        for(HospitalFloor floor : generalHospital.getFloors()) {
-//	        	System.out.println("FLOOR " + floor.getLevel());
-//	        	for(HospitalRoom room : floor.getRooms()) {
-//	        		System.out.println("ROOM " + room.getRoomID() + " " + room.getType());
-//		        	for(Patient patien : room.getPatientList()) {
-//		        		System.out.println(patien);
-//		        	}
-//				}
-//			}
+
 			idField.setText("");
 		}
 		
 		// save file button functionality
 		if(e.getSource()==saveFileButton) {
-			// to do
+			String fileName = "Hospital_Management_System-Database.txt";
+
+	        // Create the file if it doesn't exist
+	        createFileIfNotExists(fileName);
+	        
+	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+	            
+	            for (Patient patient : patientList.getPatientList()) {
+	                writer.write(patient.stringToFile());
+	                writer.newLine(); // Add a newline character to separate lines
+	            }
+
+	            System.out.println("Data has been written to the file: " + fileName);
+	            JOptionPane.showMessageDialog(frame, "Data is saved.", "Message", JOptionPane.INFORMATION_MESSAGE);
+	        } catch (IOException exception) {
+	            // Handle IOException if there is an issue with file I/O
+	        	exception.printStackTrace();
+	        }
 		}
 		
 		// backup functionality
 		if(e.getSource()==backupButton) {
-			// to do
+			String fileName = filenameField.getText();
+			fileName = fileName + ".bak";
+			
+	        // Create the file if it doesn't exist
+	        createFileIfNotExists(fileName);
+	        
+	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+	            
+	            for (Patient patient : patientList.getPatientList()) {
+	                writer.write(patient.stringToFile());
+	                writer.newLine(); // Add a newline character to separate lines
+	            }
+	            String message = "Data is backed up to file " + fileName;
+	            System.out.println("Data has been backed up to the file: " + fileName);
+	            JOptionPane.showMessageDialog(frame, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+	        } catch (IOException exception) {
+	            // Handle IOException if there is an issue with file I/O
+	        	exception.printStackTrace();
+	        }
 			filenameField.setText("Hospital Management System");
 		}
 		
