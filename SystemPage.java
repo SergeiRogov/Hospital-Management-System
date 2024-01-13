@@ -241,7 +241,7 @@ public class SystemPage extends JFrame implements ActionListener {
     }
     
     // Function to find the HospitalRoom with the smallest PatientList
-    private static String findRoomIDWithSmallestPatientList(ArrayList<? extends HospitalRoom> hospitalRooms) {
+    private static HospitalRoom findRoomWithSmallestPatientList(ArrayList<? extends HospitalRoom> hospitalRooms) {
     	HospitalRoom smallestRoom = null;
         int smallestSize = Integer.MAX_VALUE;
 
@@ -253,12 +253,8 @@ public class SystemPage extends JFrame implements ActionListener {
                 smallestRoom = room;
             }
         }
-        
-        if (smallestRoom == null) {
-        	return hospitalRooms.get(0).getRoomID();
-        }
 
-        return smallestRoom.getRoomID();
+        return smallestRoom;
     }
 
 	@Override
@@ -271,6 +267,7 @@ public class SystemPage extends JFrame implements ActionListener {
 			String surname = surnameField.getText();
 			String illness = illnessField.getText();
 			String roomid;
+			HospitalRoom smallestRoom;
 			
 			String roomType;
 			// Assign a room based on selected room type
@@ -287,16 +284,32 @@ public class SystemPage extends JFrame implements ActionListener {
 	        
 	        switch (roomType) {
 	        case "Medical":
-	        	roomid = findRoomIDWithSmallestPatientList(MedicalRoom.medicalRooms);
+	        	smallestRoom = findRoomWithSmallestPatientList(MedicalRoom.medicalRooms);
+	        	if (smallestRoom == null) {
+	        		roomid = MedicalRoom.medicalRooms.get(0).getRoomID();
+	        	}
+	        	roomid = smallestRoom.getRoomID();
 	            break;
 	        case "Intensive Care":
-	        	roomid = findRoomIDWithSmallestPatientList(IntensiveCareRoom.intensiveCareRooms);
+	        	smallestRoom = findRoomWithSmallestPatientList(IntensiveCareRoom.intensiveCareRooms);
+	        	if (smallestRoom == null) {
+	        		roomid = IntensiveCareRoom.intensiveCareRooms.get(0).getRoomID();
+	        	} else
+	        		roomid = smallestRoom.getRoomID();
 	            break;
 	        case "Operating":
-	        	roomid = findRoomIDWithSmallestPatientList(OperatingRoom.operatingRooms);
+	        	smallestRoom = findRoomWithSmallestPatientList(OperatingRoom.operatingRooms);
+	        	if (smallestRoom == null) {
+	        		roomid = OperatingRoom.operatingRooms.get(0).getRoomID();
+	        	} else
+	        		roomid = smallestRoom.getRoomID();
 	            break;
 	        default:
-	        	roomid = findRoomIDWithSmallestPatientList(MedicalRoom.medicalRooms);
+	        	smallestRoom = findRoomWithSmallestPatientList(MedicalRoom.medicalRooms);
+	        	if (smallestRoom == null) {
+	        		roomid = MedicalRoom.medicalRooms.get(0).getRoomID();
+	        	} else
+	        		roomid = smallestRoom.getRoomID();
 	            break;
 	        }
 	        
@@ -309,6 +322,7 @@ public class SystemPage extends JFrame implements ActionListener {
 			patient.setRoomId(roomid);
 			
 			patientList.addPatient(patient);
+			smallestRoom.addPatient(patient);
 			
 			switch (roomType) {
 	        case "Medical":
