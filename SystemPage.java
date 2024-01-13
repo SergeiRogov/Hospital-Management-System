@@ -347,7 +347,7 @@ public class SystemPage extends JFrame implements ActionListener {
             if (file.createNewFile()) {
                 System.out.println("File created: " + file.getName());
             } else {
-                System.out.println("File already exists.");
+                System.out.println("File " + fileName + " will be updated");
             }
         } catch (IOException e) {
             System.out.println("An error occurred while creating the file.");
@@ -411,7 +411,7 @@ public class SystemPage extends JFrame implements ActionListener {
 	        				roomWithPatient = room;
 	        				break;
 						}
-		        	}
+	        		}
 				}
 			}
 			
@@ -451,13 +451,16 @@ public class SystemPage extends JFrame implements ActionListener {
 	        createFileIfNotExists(fileName);
 	        
 	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+	        	
+	        	writer.write(Patient.getPatientCount() + "");
+	        	writer.newLine(); // Add a newline character to separate lines	
 	            
 	            for (Patient patient : patientList.getPatientList()) {
 	                writer.write(patient.stringToFile());
 	                writer.newLine(); // Add a newline character to separate lines
 	            }
 
-	            System.out.println("Data has been written to the file: " + fileName);
+	            System.out.println("File: " + fileName + " has been updated");
 	            JOptionPane.showMessageDialog(frame, "Data is saved.", "Message", JOptionPane.INFORMATION_MESSAGE);
 	        } catch (IOException exception) {
 	            // Handle IOException if there is an issue with file I/O
@@ -474,6 +477,9 @@ public class SystemPage extends JFrame implements ActionListener {
 	        createFileIfNotExists(fileName);
 	        
 	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+	        	
+	        	writer.write(Patient.getPatientCount() + "");
+	        	writer.newLine(); // Add a newline character to separate lines	
 	            
 	            for (Patient patient : patientList.getPatientList()) {
 	                writer.write(patient.stringToFile());

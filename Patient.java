@@ -27,6 +27,11 @@ public class Patient {
 		return id;
 	}
     
+    public static int getPatientCount() {
+		return patientCount;
+	}
+    
+    
     public String stringToFile() {
 		return id + ";" + name + ";" + surname + ";" + illness + ";" + room.getRoomID();
 	}
