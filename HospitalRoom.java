@@ -16,7 +16,6 @@ public abstract class HospitalRoom {
 	private double area;
 	private String type;
 	private String roomID;
-	private ArrayList<HospitalEquipment> equipmentItems = new ArrayList<HospitalEquipment>();
 	private ArrayList<Patient> roomPatients = new ArrayList<Patient>();
 	
 	/**
