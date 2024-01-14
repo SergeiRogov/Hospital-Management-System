@@ -15,9 +15,6 @@ public class Doctor extends HospitalStaff {
 	// List of patients
 	private ArrayList<Patient> patients = new ArrayList<Patient>();
 	
-//	// array to cumulate all doctors of hospital
-//	protected static ArrayList<Doctor> doctors = new ArrayList<>();
-//	
 	/**
 	 * @method Doctor
      * @brief Constructs a doctor.

@@ -90,12 +90,13 @@ public class Patient {
     }
     
     /**
-	 * @method getID
-     * @brief Getter method for ID.
-     * @return Patient's ID.
+	 * @method setPatientCount
+     * @brief Setter method for patientCount. 
+     * 		  Needed to assign appropriate id after restoring data from database file.
+     * @param count Total number of patients ever created in a system.
      */
-    public String getID() {
-		return id;
+    public static void setPatientCount(int count) {
+		patientCount = count;
 	}
     
     /**
@@ -108,12 +109,12 @@ public class Patient {
 	}
     
     /**
-	 * @method setPatientCount
-     * @brief Setter method for patientCount.
-     * @param count Total number of patients ever created in a system.
+	 * @method getID
+     * @brief Getter method for ID.
+     * @return Patient's ID.
      */
-    public static void setPatientCount(int count) {
-		patientCount = count;
+    public String getID() {
+		return id;
 	}
     
     /**
@@ -131,7 +132,7 @@ public class Patient {
      * return String representation.
      */
     public String toString() {
-		return id + " [Name:" + name + " " + surname + "; Illness:" + illness + "; Doctor: " + doctor.getName() + "]";
+		return id + " [Name: " + name + " " + surname + "; Illness: " + illness + "; Doctor: " + doctor.getName() + "]";
 	}
 
 }

@@ -47,7 +47,7 @@ public class LoginPage implements ActionListener {
 		loginInfo = login_passwords;
 		
 		// Locate elements across the frame
-		titleLabel.setBounds(110, 0, 300, 25);
+		titleLabel.setBounds(110, 35, 300, 25);
 		titleLabel.setFont(new Font(null, Font.BOLD, 15));
 		
 		loginLabel.setBounds(50, 100, 75, 25);

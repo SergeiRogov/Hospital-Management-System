@@ -18,10 +18,10 @@ public class Login_Passwords {
 	
 	/**
 	 * @method Login_Passwords
-     * @brief Constructs a Login_Passwords instance wit 3 pairs.
+     * @brief Constructs a Login_Passwords instance with 3 pairs.
      */
 	Login_Passwords(){
-		logininfo.put("q", "q");
+		logininfo.put("Admin1", "qwerty");
 		logininfo.put("Admin2", "abcdefg");
 		logininfo.put("Admin3", "123passcode");
 	}

@@ -42,15 +42,6 @@ public class PatientList {
     }
 	
 	/**
-	 * @method getPatientList
-     * @brief Getter method for a list of patients.
-     * @return List of patients.
-     */
-	public ArrayList<Patient> getPatientList() {
-        return patients;
-    }
-	
-	/**
 	 * @method removePatient
      * @brief Removes given patient from a list.
      * @param patient Hospital patient.
@@ -58,5 +49,14 @@ public class PatientList {
 	public void removePatient(Patient patient) {
 		patients.remove(patient);
 	}
+	
+	/**
+	 * @method getPatientList
+     * @brief Getter method for a list of patients.
+     * @return List of patients.
+     */
+	public ArrayList<Patient> getPatientList() {
+        return patients;
+    }
 
 }

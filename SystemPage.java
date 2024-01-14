@@ -37,13 +37,10 @@ import javax.swing.JTextField;
  * @class SystemPage
  * @brief Represents the main page of the Hospital Management System.
  */
-public class SystemPage extends JFrame implements ActionListener {
-	
-	// The serialVersionUID provides version control for serialized objects
-	private static final long serialVersionUID = 1L;
+public class SystemPage implements ActionListener {
 	
 	// File where system information is stored
-	final static String DATABASE_FILE = "Hospital_Management_System-Database.txt";
+	final private static String DATABASE_FILE = "Hospital_Management_System-Database.txt";
 	
 	// List of Hospital patients
 	private PatientList patientList;
@@ -418,6 +415,7 @@ public class SystemPage extends JFrame implements ActionListener {
                         	}
                         }
                     }
+                    
                     Doctor doctorToAssign = null;
                     for (Doctor doctor : hospitalDoctors) {
                     	if (doctor.getName().equals(doctorName)) {
