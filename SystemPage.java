@@ -291,11 +291,12 @@ public class SystemPage extends JFrame implements ActionListener {
         // Add JTextArea for displaying room information
         roomInfoTextArea.setBounds(10, 270, 830, 300);
         roomInfoTextArea.setEditable(false);
-        roomInfoTextArea.selectAll(); // to make it visible initially
         frame.add(roomInfoTextArea);
-        
+
         // Update room information
         updateRoomInfo();
+        
+        roomInfoTextArea.selectAll(); // to make it visible initially
       
 	}
 
@@ -506,6 +507,7 @@ public class SystemPage extends JFrame implements ActionListener {
 			HospitalRoom smallestRoom;
 			
 			// Assign a room based on selected room type
+			// find a room with smallest number of patients among selected room type
 	        if (radioButton1.isSelected()) {
 	        	smallestRoom = findRoomWithSmallestPatientList(MedicalRoom.medicalRooms);
 	        } else if (radioButton2.isSelected()) {
