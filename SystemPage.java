@@ -270,7 +270,7 @@ public class SystemPage extends JFrame implements ActionListener {
 		
 		// Application will exit after user clicks close button
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(850, 700); // Dimensions of a frame
+		frame.setSize(850, 620); // Dimensions of a frame
 		frame.setLayout(null);
 		frame.setVisible(true);
 		
