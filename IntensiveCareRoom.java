@@ -25,5 +25,15 @@ public class IntensiveCareRoom extends HospitalRoom {
 		super(area, "Intensive Care", id);
 		intensiveCareRooms.add(this);
 	}
+	
+	/**
+	 * @method representAsString
+     * @brief Makes a string representation of a class.
+     * @return String representation.
+     */
+	@Override
+	public String representAsString() {
+		return "Intensive Care room. ID: " + this.getRoomID() + " Area: " + (this.getArea() + "");
+	}
 
 }

@@ -16,6 +16,7 @@ public class Patient {
 	private String illness;
 	private String id;
 	private HospitalRoom room;
+	private Doctor doctor;
 	
 	// total number of patients ever created in a system
 	private static int patientCount = 0;
@@ -53,12 +54,39 @@ public class Patient {
     }
     
     /**
+	 * @method Patient
+     * @brief Overloaded constructor of a patient.
+     * @param id ID of a patient.
+     * @param name Name of a patient.
+     * @param surname Surname of a patient.
+     * @param illness Illness of a patient.
+     * @param room Patient's room.
+     */
+    public Patient(String id, String name, String surname, String illness, HospitalRoom room, Doctor doctor) {
+    	this.id = id;
+    	this.name = name;
+        this.surname = surname;
+        this.illness = illness;
+        this.room = room;
+        this.doctor = doctor;
+    }
+    
+    /**
 	 * @method setRoom
      * @brief Setter method for a room.
      * @param room Patient's room.
      */
     public void setRoom(HospitalRoom room) {
     	this.room = room;
+    }
+    
+    /**
+	 * @method setDoctor
+     * @brief Setter method for a doctor.
+     * @param doctor Patient's doctor.
+     */
+    public void setDoctor(Doctor doctor) {
+    	this.doctor = doctor;
     }
     
     /**
@@ -94,7 +122,7 @@ public class Patient {
      * return String representation.
      */
     public String stringToFile() {
-		return id + ";" + name + ";" + surname + ";" + illness + ";" + room.getRoomID();
+		return id + ";" + name + ";" + surname + ";" + illness + ";" + room.getRoomID() + ";" + doctor.getName();
 	}
     
     /**
@@ -103,7 +131,7 @@ public class Patient {
      * return String representation.
      */
     public String toString() {
-		return id + " [Name:" + name + " " + surname + "; Illness:" + illness + "]";
+		return id + " [Name:" + name + " " + surname + "; Illness:" + illness + "; Doctor: " + doctor.getName() + "]";
 	}
 
 }

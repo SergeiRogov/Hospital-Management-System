@@ -69,6 +69,15 @@ public abstract class HospitalRoom {
 	}
 	
 	/**
+	 * @method getArea
+     * @brief Getter method for area.
+     * @return Room area in square meters.
+     */
+	public double getArea() {
+		return this.area;
+	}
+	
+	/**
 	 * @method getPatientList
      * @brief Getter method for a PatientList.
      * @return List of patients.
@@ -76,5 +85,11 @@ public abstract class HospitalRoom {
 	public ArrayList<Patient> getPatientList(){
 		return roomPatients;
 	}
-
+	
+	/**
+	 * @method representAsString
+     * @brief Makes a string representation of a class.
+     * @return String representation.
+     */
+	public abstract String representAsString();
 }

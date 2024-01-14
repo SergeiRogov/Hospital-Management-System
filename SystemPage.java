@@ -10,7 +10,7 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
+import java.util.Random;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -49,6 +49,8 @@ public class SystemPage extends JFrame implements ActionListener {
 	private PatientList patientList;
 	// Instance of Hospital
 	private Hospital generalHospital;
+	// Doctors
+	private static ArrayList<Doctor> hospitalDoctors;
 	
 	// JPanel for drawing
 	private JPanel drawingPanel; 
@@ -99,9 +101,21 @@ public class SystemPage extends JFrame implements ActionListener {
 	/**
 	 * @method SystemPage
      * @brief Constructs a new SystemPage with the given user login.
+     * 		  Instantiates all system-related objects and GUI.
      * @param userLogin The login of the user accessing the system.
      */
 	public SystemPage(String userLogin){
+		
+		initializeHospital();
+		initializeGUI(userLogin);
+		
+	}
+	
+	/**
+	 * @method initializeHospital
+     * @brief Initializes all necessary Hospital components.
+     */
+	private void initializeHospital() {
 		
 		// Defining array of rooms for each floor
 		ArrayList<HospitalRoom> roomsFloor1 = new ArrayList<>();
@@ -143,6 +157,22 @@ public class SystemPage extends JFrame implements ActionListener {
 		generalHospital = new Hospital(floors);
 		
 		patientList = new PatientList();
+		
+		hospitalDoctors = new ArrayList<>();
+		
+		hospitalDoctors.add(new Doctor("House"));
+		hospitalDoctors.add(new Doctor("Forman"));
+		hospitalDoctors.add(new Doctor("Cameron"));
+		hospitalDoctors.add(new Doctor("Chase"));
+		
+    }
+	
+	/**
+	 * @method initializeGUI
+     * @brief Initializes all necessary GUI elements. GUI setup logic.
+     * @param userLogin The login of the user accessing the system.
+     */
+	private void initializeGUI(String userLogin) {
 		
 		// DocumentListener for text fields
 		// Anonymous inner class
@@ -296,9 +326,10 @@ public class SystemPage extends JFrame implements ActionListener {
         // Update room information
         updateRoomInfo();
         
-        roomInfoTextArea.selectAll(); // to make it visible initially
-      
-	}
+        // to make it visible initially
+        roomInfoTextArea.selectAll();
+
+    }
 
 	/**
 	 * @method updateRoomInfo
@@ -333,6 +364,27 @@ public class SystemPage extends JFrame implements ActionListener {
     }
     
     /**
+	 * @method updateButtonsState
+     * @brief Updates the state of buttons based on text field contents.
+     */
+    private void updateButtonsState() {
+        boolean isAddButtonEnabled = !nameField.getText().isEmpty() &&
+                !surnameField.getText().isEmpty() &&
+                !illnessField.getText().isEmpty();
+        
+        // enable only if all fields related to AddButton are filled
+        addPatientButton.setEnabled(isAddButtonEnabled);
+
+        boolean isRemoveButtonEnabled = !idField.getText().isEmpty();
+        // enable only if idField is filled
+        removePatientButton.setEnabled(isRemoveButtonEnabled);
+        
+        boolean isBackupButtonEnabled = !filenameField.getText().isEmpty();
+        // enable only if filenameField is filled
+        backupButton.setEnabled(isBackupButtonEnabled);
+    }
+    
+    /**
 	 * @method loadFromFile
      * @brief Loads information from the database file and
      * 		  instantiates corresponding data structures.
@@ -348,12 +400,13 @@ public class SystemPage extends JFrame implements ActionListener {
             	
             	String[] values = line.split(";");
             	// lines from second and further - patients info
-            	if (values.length == 5) {
+            	if (values.length == 6) {
                     String patientID = values[0];
                     String name = values[1];
                     String surname = values[2];
                     String illness = values[3];
                     String roomID = values[4];
+                    String doctorName = values[5];
                     
                     HospitalRoom roomToAssign = null;
                     // Find the room of patient by room id
@@ -365,6 +418,13 @@ public class SystemPage extends JFrame implements ActionListener {
                         	}
                         }
                     }
+                    Doctor doctorToAssign = null;
+                    for (Doctor doctor : hospitalDoctors) {
+                    	if (doctor.getName().equals(doctorName)) {
+                    		doctorToAssign = doctor;
+                    		break;
+                    	}
+                    }
                     // If room not found - assign to the first room on the third floor
                     // (roomToAssign should NOT be null unless someone manually modified the
                     // records in file or information about rooms in the hospital was changed)
@@ -372,11 +432,19 @@ public class SystemPage extends JFrame implements ActionListener {
                     	roomToAssign = generalHospital.getFloors().get(2).getRooms().get(0);
                     }
                     
-                    Patient patient = new Patient(patientID, name, surname, illness, roomToAssign);
+                    // The same for a doctor
+                    if (doctorToAssign == null) {
+                    	doctorToAssign = hospitalDoctors.get(0);
+                    }
+                    
+                    Patient patient = new Patient(patientID, name, surname, illness, roomToAssign, doctorToAssign);
+                    
                     // Add extracted patient to the list of Patients of whole Hospital
                     patientList.addPatient(patient);
                     // Add extracted patient to the list of Patients of exact Room
                     roomToAssign.addPatient(patient);
+                    // Add extracted patient to the list of Patients of exact Doctor
+                    doctorToAssign.addPatient(patient);
                 // first line - total number of patients ever entered into system
                 } else if (values.length == 1) {
                 	int patientCount = Integer.parseInt(values[0]);
@@ -386,6 +454,53 @@ public class SystemPage extends JFrame implements ActionListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    /**
+	 * @method createFileIfNotExists
+     * @brief Function to create a file if it does not exist yet.
+     * @param fileName Name of the database file.
+     */
+    private static void createFileIfNotExists(String fileName) {
+        try {
+            File file = new File(fileName);
+            if (file.createNewFile()) {
+                System.out.println("File created: " + file.getName());
+            } else {
+                System.out.println("File " + fileName + " will be updated");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while creating the file.");
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+	 * @method findRoomWithSmallestPatientList
+     * @brief Function to find the HospitalRoom with the smallest PatientList.
+     * @param hospitalRooms Upcasted array of hospital rooms.
+     * @return Room with smallest number of patients.
+     */
+    private static HospitalRoom findRoomWithSmallestPatientList(ArrayList<? extends HospitalRoom> hospitalRooms) {
+    	HospitalRoom smallestRoom = null;
+        int smallestSize = Integer.MAX_VALUE;
+
+        for (HospitalRoom room : hospitalRooms) {
+            int currentSize = room.getPatientList().size(); 
+
+            if (currentSize < smallestSize) {
+                smallestSize = currentSize;
+                smallestRoom = room;
+            }
+        }
+        
+        // If all rooms are empty - return the first one
+        if (smallestRoom == null) {
+    		smallestRoom = hospitalRooms.get(0);
+    	}
+        
+        // Return the Room with smallest number of patients in it.
+        return smallestRoom;
     }
 
     /**
@@ -421,73 +536,16 @@ public class SystemPage extends JFrame implements ActionListener {
 
         }
     }
-	
-    /**
-	 * @method updateButtonsState
-     * @brief Updates the state of buttons based on text field contents.
-     */
-    private void updateButtonsState() {
-        boolean isAddButtonEnabled = !nameField.getText().isEmpty() &&
-                !surnameField.getText().isEmpty() &&
-                !illnessField.getText().isEmpty();
-        
-        // enable only if all fields related to AddButton are filled
-        addPatientButton.setEnabled(isAddButtonEnabled);
-
-        boolean isRemoveButtonEnabled = !idField.getText().isEmpty();
-        // enable only if idField is filled
-        removePatientButton.setEnabled(isRemoveButtonEnabled);
-        
-        boolean isBackupButtonEnabled = !filenameField.getText().isEmpty();
-        // enable only if filenameField is filled
-        backupButton.setEnabled(isBackupButtonEnabled);
-    }
-
-    /**
-	 * @method findRoomWithSmallestPatientList
-     * @brief Function to find the HospitalRoom with the smallest PatientList.
-     * @param hospitalRooms Upcasted array of hospital rooms.
-     * @return Room with smallest number of patients.
-     */
-    private static HospitalRoom findRoomWithSmallestPatientList(ArrayList<? extends HospitalRoom> hospitalRooms) {
-    	HospitalRoom smallestRoom = null;
-        int smallestSize = Integer.MAX_VALUE;
-
-        for (HospitalRoom room : hospitalRooms) {
-            int currentSize = room.getPatientList().size(); 
-
-            if (currentSize < smallestSize) {
-                smallestSize = currentSize;
-                smallestRoom = room;
-            }
-        }
-        
-        // If all rooms are empty - return the first one
-        if (smallestRoom == null) {
-    		smallestRoom = hospitalRooms.get(0);
-    	}
-        
-        // Return the Room with smallest number of patients in it.
-        return smallestRoom;
-    }
     
     /**
-	 * @method createFileIfNotExists
-     * @brief Function to create a file if it does not exist yet.
-     * @param fileName Name of the database file.
+     * @method getRandomIndex
+     * @brief computes random number between 0 (inclusive) and the length of the array (exclusive).
+     * @param arrayLength Length of array.
+     * @return Number from 0 to arrayLength.
      */
-    private static void createFileIfNotExists(String fileName) {
-        try {
-            File file = new File(fileName);
-            if (file.createNewFile()) {
-                System.out.println("File created: " + file.getName());
-            } else {
-                System.out.println("File " + fileName + " will be updated");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred while creating the file.");
-            e.printStackTrace();
-        }
+    private static int getRandomIndex(int arrayLength) {
+        Random random = new Random();
+        return random.nextInt(arrayLength);
     }
 
     /**
@@ -500,7 +558,7 @@ public class SystemPage extends JFrame implements ActionListener {
 		
 		// addPatient button functionality
 		if(e.getSource()==addPatientButton) {
-
+			
 			String name = nameField.getText();
 			String surname = surnameField.getText();
 			String illness = illnessField.getText();
@@ -522,12 +580,16 @@ public class SystemPage extends JFrame implements ActionListener {
 			Patient patient = new Patient(name, surname, illness);
 			patient.setRoom(smallestRoom);
 			
+			Doctor assignedDoctor = hospitalDoctors.get(getRandomIndex(hospitalDoctors.size()));
+			patient.setDoctor(assignedDoctor);
+			
 			// Add new patient to the necessary arrays of patients
 			// 1) to the list of Patients of whole Hospital
 			// 2) to the list of Patients of exact Room
+			// 3) to the list of Patients of exact Doctor
 			patientList.addPatient(patient);
 			smallestRoom.addPatient(patient);
-
+			assignedDoctor.addPatient(patient);
 			updateRoomInfo();
 			// Show info message
 	        JOptionPane.showMessageDialog(frame, "New patient is added.", "Message", JOptionPane.INFORMATION_MESSAGE);

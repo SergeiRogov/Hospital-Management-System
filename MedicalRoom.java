@@ -26,4 +26,14 @@ public class MedicalRoom extends HospitalRoom {
 		medicalRooms.add(this);
 	}
 	
+	/**
+	 * @method representAsString
+     * @brief Makes a string representation of a class.
+     * @return String representation.
+     */
+	@Override
+	public String representAsString() {
+		return "Medical room. ID: " + this.getRoomID() + " Area: " + (this.getArea() + "");
+	}
+	
 }
