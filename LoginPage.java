@@ -112,8 +112,8 @@ public class LoginPage implements ActionListener {
 					messageLabel.setText("You are logged in!");
 					// get rid of login page
 					frame.dispose();
-					// instantiate Hospital Management System page
-					SystemPage systemPage = new SystemPage(userLogin);
+					// Hospital Management System page
+					new SystemPage(userLogin);
 				// corresponding messages
 				} else {
 					messageLabel.setForeground(Color.red);

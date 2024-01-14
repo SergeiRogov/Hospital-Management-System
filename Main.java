@@ -21,7 +21,7 @@ public class Main {
 		Login_Passwords loginAndPasswords = new Login_Passwords();
 		
 		// login page that authenticates the user
-		LoginPage loginPage = new LoginPage(loginAndPasswords.getLoginInfo());
+		new LoginPage(loginAndPasswords.getLoginInfo());
 	}
 
 }

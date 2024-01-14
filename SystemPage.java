@@ -676,7 +676,7 @@ public class SystemPage implements ActionListener {
 	                writer.write(patient.stringToFile());
 	                writer.newLine(); // Add a newline character to separate lines
 	            }
-	         // info messages
+	            // info messages
 	            System.out.println("File: " + fileName + " has been updated");
 	            JOptionPane.showMessageDialog(frame, "Data is saved.", "Message", JOptionPane.INFORMATION_MESSAGE);
 	        } catch (IOException exception) {
