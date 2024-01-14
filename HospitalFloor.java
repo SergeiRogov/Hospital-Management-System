@@ -31,7 +31,7 @@ public class HospitalFloor {
 	/**
 	 * @method getRooms
      * @brief Getter method for a list of rooms.
-     * @return rooms A list of rooms on a floor.
+     * @return A list of rooms on a floor.
      */
 	public ArrayList<HospitalRoom> getRooms(){
 		return rooms;
@@ -40,7 +40,7 @@ public class HospitalFloor {
 	/**
 	 * @method getLevel
      * @brief Getter method for an index of the floor.
-     * @return rooms A list of rooms on a floor.
+     * @return Index of the floor, starting from 1.
      */
 	public int getLevel(){
 		return this.level;
