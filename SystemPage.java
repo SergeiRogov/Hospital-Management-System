@@ -1,3 +1,7 @@
+/**
+ * @file SystemPage.java
+ * @brief This file contains the SystemPage class.
+ */
 package hospital_management_system;
 
 import java.awt.Color;
@@ -28,23 +32,34 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
+/**
+ * @class SystemPage
+ * @brief Represents the main page of the Hospital Management System.
+ */
 public class SystemPage extends JFrame implements ActionListener {
 	
+	// The serialVersionUID provides version control for serialized objects
 	private static final long serialVersionUID = 1L;
+	
+	// File where system information is stored
+	final static String DATABASE_FILE = "Hospital_Management_System-Database.txt";
+	
+	// List of Hospital patients
 	private PatientList patientList;
+	// Instance of Hospital
 	private Hospital generalHospital;
-	String fileName = "Hospital_Management_System-Database.txt";
 	
 	// JPanel for drawing
 	private JPanel drawingPanel; 
 	
+	//The main frame of the application
 	JFrame frame = new JFrame();
+	
 	// welcoming label
 	JLabel welcomeLabel = new JLabel();
 	
-	// add patient - related elements
+	// addPatient - related elements
 	JLabel addPatientLabel = new JLabel("Add new patient:");
 	
 	JLabel nameLabel = new JLabel("Name:");
@@ -62,13 +77,13 @@ public class SystemPage extends JFrame implements ActionListener {
     
     JButton addPatientButton = new JButton("Add patient");
     
-    // remove patient - related elements
+    // removePatient - related elements
     JLabel removePatientLabel = new JLabel("Remove patient by ID:");
 	JLabel idLabel = new JLabel("ID:");
 	JTextField idField = new JTextField();	
 	JButton removePatientButton = new JButton("Remove patient");
 	
-	// button for saving file
+	// elements for saving file
 	JLabel saveBackupLabel = new JLabel("Save/backup:");
 	JButton saveFileButton = new JButton("Save file");
 	
@@ -78,10 +93,17 @@ public class SystemPage extends JFrame implements ActionListener {
 	JTextField filenameField = new JTextField("Hospital Management System");
 	JButton backupButton = new JButton("Backup file");
 	
+	// text area to display system information
 	JTextArea roomInfoTextArea = new JTextArea();
 
-	SystemPage(String userLogin){
+	/**
+	 * @method SystemPage
+     * @brief Constructs a new SystemPage with the given user login.
+     * @param userLogin The login of the user accessing the system.
+     */
+	public SystemPage(String userLogin){
 		
+		// Defining array of rooms for each floor
 		ArrayList<HospitalRoom> roomsFloor1 = new ArrayList<>();
 		ArrayList<HospitalRoom> roomsFloor2 = new ArrayList<>();
 		ArrayList<HospitalRoom> roomsFloor3 = new ArrayList<>();
@@ -106,12 +128,14 @@ public class SystemPage extends JFrame implements ActionListener {
 		roomsFloor3.add(new MedicalRoom(17, "303"));
 		roomsFloor3.add(new IntensiveCareRoom(20, "304"));
 		
+		// Instantiating HospitalFloor objects
 		HospitalFloor hospitalFloor1 = new HospitalFloor(1, roomsFloor1);
 		HospitalFloor hospitalFloor2 = new HospitalFloor(2, roomsFloor2);
 		HospitalFloor hospitalFloor3 = new HospitalFloor(3, roomsFloor3);
 		
 		ArrayList<HospitalFloor> floors = new ArrayList<>();
-	
+		
+		// Array of floors
 		floors.add(hospitalFloor1);
 		floors.add(hospitalFloor2);
 		floors.add(hospitalFloor3);
@@ -121,6 +145,7 @@ public class SystemPage extends JFrame implements ActionListener {
 		patientList = new PatientList();
 		
 		// DocumentListener for text fields
+		// Anonymous inner class
         DocumentListener documentListener = new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -150,7 +175,7 @@ public class SystemPage extends JFrame implements ActionListener {
 		welcomeLabel.setFont(new Font(null, Font.CENTER_BASELINE, 14));
 		welcomeLabel.setText("Welcome to the Hospital Management System, " + userLogin + "!");
 		
-		// add patient - related elements
+		// Parameters of addPatient - related elements
 		addPatientLabel.setBounds(55, 45, 200, 25);
 		addPatientLabel.setFont(new Font(null, Font.BOLD, 14));
 		
@@ -177,7 +202,7 @@ public class SystemPage extends JFrame implements ActionListener {
 		addPatientButton.setFocusable(false);
 		addPatientButton.addActionListener(this);
 		
-		// remove patient - related elements
+		// Parameters of removePatient - related elements
 		removePatientLabel.setBounds(300, 45, 200, 25);
 		removePatientLabel.setFont(new Font(null, Font.BOLD, 14));
 		
@@ -189,7 +214,7 @@ public class SystemPage extends JFrame implements ActionListener {
 		removePatientButton.setFocusable(false);
 		removePatientButton.addActionListener(this);
 		
-		// save - related elements
+		// Parameters of save - related elements
 		saveBackupLabel.setBounds(620, 45, 200, 25);
 		saveBackupLabel.setFont(new Font(null, Font.BOLD, 14));
 		
@@ -197,7 +222,7 @@ public class SystemPage extends JFrame implements ActionListener {
 		saveFileButton.setFocusable(false);
 		saveFileButton.addActionListener(this);
 		
-		// backup - related elements
+		// Parameters of backup - related elements
 		filenameLabel.setBounds(530, 170, 68, 25);
 		filenameField.setBounds(598, 170, 210, 25);
 		bakLabel.setBounds(808, 170, 50, 25);
@@ -207,7 +232,7 @@ public class SystemPage extends JFrame implements ActionListener {
 		backupButton.addActionListener(this);
 		
 		// adding every element to a frame
-		// adding add patient - related elements
+		// adding addPatient - related elements
 		frame.add(welcomeLabel);
 		
 		frame.add(addPatientLabel);
@@ -227,66 +252,73 @@ public class SystemPage extends JFrame implements ActionListener {
 		
 		frame.add(addPatientButton);
 		
-		// adding remove patient - related elements
+		// adding removePatient - related elements
 		frame.add(removePatientLabel);
 		frame.add(idLabel);
 		frame.add(idField);
 		frame.add(removePatientButton);
 		
-		// adding save File Button - related elements
+		// adding saveFile - related elements
 		frame.add(saveBackupLabel);
 		frame.add(saveFileButton);
 		
-		// adding backup File Button - related elements
+		// adding backupFile - related elements
 		frame.add(backupButton);
 		frame.add(filenameLabel);
 		frame.add(bakLabel);
 		frame.add(filenameField);
 		
+		// Application will exit after user clicks close button
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(850, 700);
+		frame.setSize(850, 700); // Dimensions of a frame
 		frame.setLayout(null);
 		frame.setVisible(true);
 		
-		drawingPanel = new DrawingPanel(); // Create a JPanel for drawing
-        drawingPanel.setBounds(0, 0, 850, 700); // Set the bounds of the drawing panel
+		// JPanel for drawing
+		drawingPanel = new DrawingPanel(); 
+        drawingPanel.setBounds(0, 0, 850, 700);
         frame.add(drawingPanel);
         
-        Path filePath = Paths.get(fileName);
-        
+        // If database file exists - load system information from it
+        Path filePath = Paths.get(DATABASE_FILE);
         if (Files.exists(filePath)) {
-        	loadFromFile(fileName);
+        	loadFromFile(DATABASE_FILE);
         }
         
+        // enable/disable buttons
         updateButtonsState();
 
         // Add JTextArea for displaying room information
         roomInfoTextArea.setBounds(10, 270, 830, 300);
         roomInfoTextArea.setEditable(false);
+        roomInfoTextArea.selectAll(); // to make it visible initially
         frame.add(roomInfoTextArea);
         
         // Update room information
         updateRoomInfo();
-        
-        roomInfoTextArea.selectAll();
       
 	}
-	
-	// Method to update room information in the JTextArea
+
+	/**
+	 * @method updateRoomInfo
+     * @brief Method to update room information in the JTextArea.
+     */
     private void updateRoomInfo() {
+    	// string for information display
         StringBuilder roomInfo = new StringBuilder();
 
+        // Iterating over hospital floors
         for (HospitalFloor floor : generalHospital.getFloors()) {
             roomInfo.append("Floor ").append(floor.getLevel()).append(": \n");
-
+            // Iterating over floor rooms
             for (HospitalRoom room : floor.getRooms()) {
                 roomInfo.append("    Room ").append(room.getRoomID()).append(" (").append(room.getType()).append("):");
-                	
+
                 if (room.getPatientList().isEmpty()) {
+                	// Zero patients in a room
                     roomInfo.append(" Empty\n");
-                    
                 } else {
-                	
+                	// Iterating over patients in a room
                 	for (Patient patient : room.getPatientList()) {
                 		roomInfo.append(" Patient ").append(patient.toString()).append(",");
                 	}
@@ -295,17 +327,26 @@ public class SystemPage extends JFrame implements ActionListener {
             }
             roomInfo.append("\n");
         }
-
+        // Put updated information into Text Area
         roomInfoTextArea.setText(roomInfo.toString());
     }
     
+    /**
+	 * @method loadFromFile
+     * @brief Loads information from the database file and
+     * 		  instantiates corresponding data structures.
+     * @param fileName Database filename.
+     */
     private void loadFromFile(String fileName) {
+    	// Read from .txt file
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             
             String line;
+            // Read line by line
             while ((line = reader.readLine()) != null) {
             	
             	String[] values = line.split(";");
+            	// lines from second and further - patients info
             	if (values.length == 5) {
                     String patientID = values[0];
                     String name = values[1];
@@ -314,7 +355,7 @@ public class SystemPage extends JFrame implements ActionListener {
                     String roomID = values[4];
                     
                     HospitalRoom roomToAssign = null;
-                    
+                    // Find the room of patient by room id
                     for (HospitalFloor floor : generalHospital.getFloors()) { 
                         for (HospitalRoom room : floor.getRooms()) {
                         	if (room.getRoomID().equals(roomID)) {
@@ -323,15 +364,19 @@ public class SystemPage extends JFrame implements ActionListener {
                         	}
                         }
                     }
-                    
+                    // If room not found - assign to the first room on the third floor
+                    // (roomToAssign should NOT be null unless someone manually modified the
+                    // records in file or information about rooms in the hospital was changed)
                     if (roomToAssign == null) {
                     	roomToAssign = generalHospital.getFloors().get(2).getRooms().get(0);
                     }
-
+                    
                     Patient patient = new Patient(patientID, name, surname, illness, roomToAssign);
+                    // Add extracted patient to the list of Patients of whole Hospital
                     patientList.addPatient(patient);
+                    // Add extracted patient to the list of Patients of exact Room
                     roomToAssign.addPatient(patient);
-          
+                // first line - total number of patients ever entered into system
                 } else if (values.length == 1) {
                 	int patientCount = Integer.parseInt(values[0]);
                 	Patient.setPatientCount(patientCount);
@@ -341,18 +386,29 @@ public class SystemPage extends JFrame implements ActionListener {
             e.printStackTrace();
         }
     }
-	
-	// Create a custom JPanel for drawing
-    private class DrawingPanel extends JPanel{
+
+    /**
+     * @class DrawingPanel
+     * @brief Custom JPanel for drawing.
+     */
+    private class DrawingPanel extends JPanel {
+    	
+    	// The serialVersionUID provides version control for serialized objects
     	private static final long serialVersionUID = 1L;
+    	
+    	/**
+    	 * @method paintComponent
+         * @brief Draws black lines to separate elements.
+         * @param g The Graphics context used for drawing.
+         */
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-
-            // Black lines to separate elements
+            
+            // Set color to black
             g.setColor(Color.BLACK);
             
-            // Horizontal separating line
+            // Horizontal upper separating line
             g.drawLine(0, 40, 850, 40); 
             
             // Vertical lines separating left, middle and right sections
@@ -365,22 +421,33 @@ public class SystemPage extends JFrame implements ActionListener {
         }
     }
 	
-	// Update the state of buttons based on text field contents
+    /**
+	 * @method updateButtonsState
+     * @brief Updates the state of buttons based on text field contents.
+     */
     private void updateButtonsState() {
         boolean isAddButtonEnabled = !nameField.getText().isEmpty() &&
                 !surnameField.getText().isEmpty() &&
                 !illnessField.getText().isEmpty();
-
+        
+        // enable only if all fields related to AddButton are filled
         addPatientButton.setEnabled(isAddButtonEnabled);
 
         boolean isRemoveButtonEnabled = !idField.getText().isEmpty();
+        // enable only if idField is filled
         removePatientButton.setEnabled(isRemoveButtonEnabled);
         
         boolean isBackupButtonEnabled = !filenameField.getText().isEmpty();
+        // enable only if filenameField is filled
         backupButton.setEnabled(isBackupButtonEnabled);
     }
-    
-    // Function to find the HospitalRoom with the smallest PatientList
+
+    /**
+	 * @method findRoomWithSmallestPatientList
+     * @brief Function to find the HospitalRoom with the smallest PatientList.
+     * @param hospitalRooms Upcasted array of hospital rooms.
+     * @return Room with smallest number of patients.
+     */
     private static HospitalRoom findRoomWithSmallestPatientList(ArrayList<? extends HospitalRoom> hospitalRooms) {
     	HospitalRoom smallestRoom = null;
         int smallestSize = Integer.MAX_VALUE;
@@ -394,13 +461,20 @@ public class SystemPage extends JFrame implements ActionListener {
             }
         }
         
+        // If all rooms are empty - return the first one
         if (smallestRoom == null) {
     		smallestRoom = hospitalRooms.get(0);
     	}
-
+        
+        // Return the Room with smallest number of patients in it.
         return smallestRoom;
     }
     
+    /**
+	 * @method createFileIfNotExists
+     * @brief Function to create a file if it does not exist yet.
+     * @param fileName Name of the database file.
+     */
     private static void createFileIfNotExists(String fileName) {
         try {
             File file = new File(fileName);
@@ -415,6 +489,11 @@ public class SystemPage extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * @method actionPerformed
+     * @brief Handles action events for various buttons in the Hospital Management System GUI.
+     * @param e The ActionEvent representing the button click or action.
+     */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -439,14 +518,19 @@ public class SystemPage extends JFrame implements ActionListener {
 	        }
 			
 			Patient patient = new Patient(name, surname, illness);
-
 			patient.setRoom(smallestRoom);
+			
+			// Add new patient to the necessary arrays of patients
+			// 1) to the list of Patients of whole Hospital
+			// 2) to the list of Patients of exact Room
 			patientList.addPatient(patient);
 			smallestRoom.addPatient(patient);
 
 			updateRoomInfo();
+			// Show info message
 	        JOptionPane.showMessageDialog(frame, "New patient is added.", "Message", JOptionPane.INFORMATION_MESSAGE);
 	        
+	        // Reset text fields
 			nameField.setText("");
 			surnameField.setText("");
 			illnessField.setText("");
@@ -462,6 +546,7 @@ public class SystemPage extends JFrame implements ActionListener {
 			
 			HospitalRoom roomWithPatient = null;
 			
+			// Find patient by ID in one of Rooms
 			for(HospitalFloor floor : generalHospital.getFloors()) {
 				for(HospitalRoom room : floor.getRooms()) {
 	        		ArrayList<Patient> roomPatients = room.getPatientList();
@@ -477,11 +562,14 @@ public class SystemPage extends JFrame implements ActionListener {
 			
 			if (patientToDelete == null) {
 		        // No patient with such ID
+				// Appropriate message is displayed in another code block
 				// No code needed
 		    } else {
+		    	// remove patient from this room
 		    	roomWithPatient.removePatient(patientToDelete);
 		    }
 			
+			// Find patient by ID in array of patients
 			patientToDelete = null;
 			for(Patient patient : patients) {
 				if(patient.getID().equals(idToDelete)) {
@@ -490,16 +578,20 @@ public class SystemPage extends JFrame implements ActionListener {
 				}
 			}
 			
+			// Appropriate messages
 			if (patientToDelete == null) {
 				String message = "Patient " + idToDelete + " is not found.";
 				JOptionPane.showMessageDialog(frame, message, "Message", JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				String message = "Patient " + idToDelete + " is removed.";
+				// remove patient from patients array
 				patientList.removePatient(patientToDelete);
+				// update information
 				updateRoomInfo();
 				JOptionPane.showMessageDialog(frame, message, "Message", JOptionPane.INFORMATION_MESSAGE);
 			}
 
+			// reset text field
 			idField.setText("");
 		}
 		
@@ -510,16 +602,19 @@ public class SystemPage extends JFrame implements ActionListener {
 	        // Create the file if it doesn't exist
 	        createFileIfNotExists(fileName);
 	        
+	        // write to database file
 	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
 	        	
+	        	// first line - total number of patients ever added to a system
 	        	writer.write(Patient.getPatientCount() + "");
 	        	writer.newLine(); // Add a newline character to separate lines	
 	            
+	        	// line by line, information about patients
 	            for (Patient patient : patientList.getPatientList()) {
 	                writer.write(patient.stringToFile());
 	                writer.newLine(); // Add a newline character to separate lines
 	            }
-
+	         // info messages
 	            System.out.println("File: " + fileName + " has been updated");
 	            JOptionPane.showMessageDialog(frame, "Data is saved.", "Message", JOptionPane.INFORMATION_MESSAGE);
 	        } catch (IOException exception) {
@@ -536,15 +631,19 @@ public class SystemPage extends JFrame implements ActionListener {
 	        // Create the file if it doesn't exist
 	        createFileIfNotExists(fileName);
 	        
+	        // write to backup file
 	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
 	        	
+	        	// first line - total number of patients ever added to a system
 	        	writer.write(Patient.getPatientCount() + "");
 	        	writer.newLine(); // Add a newline character to separate lines	
 	            
+	        	// line by line, information about patients
 	            for (Patient patient : patientList.getPatientList()) {
 	                writer.write(patient.stringToFile());
 	                writer.newLine(); // Add a newline character to separate lines
 	            }
+	            // info messages
 	            String message = "Data is backed up to file " + fileName;
 	            System.out.println("Data has been backed up to the file: " + fileName);
 	            JOptionPane.showMessageDialog(frame, message, "Message", JOptionPane.INFORMATION_MESSAGE);
@@ -554,6 +653,5 @@ public class SystemPage extends JFrame implements ActionListener {
 	        }
 			filenameField.setText("Hospital Management System");
 		}
-		
 	}
 }
